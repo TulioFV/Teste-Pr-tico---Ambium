@@ -1,0 +1,94 @@
+Conhecimentos Gerais
+
+1)Sendo as operações disponíveis no Web service, a aplicação solicita uma dessas operações. 
+O Web service efetua o processamento e envia os dados para a aplicação que requereu a operação.
+Alguns são SOA, SOAP, REStful, WSDL e UDDI.
+
+2)API é usada paca comunicação entre dois programas, já o Webservice usa a rede HTTP para se comunicar, via rede,utilizando, por exemplo SOAP, REST E XML-RPC, como meio de comunicação.
+
+3)São dua abordagens diferentes de transmissão de dados online, REST é um conjunto de princípios de arquitetura;
+o SOAP é um protocolo oficial mantido pela W3C (World Wide Web Consortium); as APIs REST são mais modernos e leves, como desenvolvimento de aplicações mobile e serverless.
+O SOAP já ofere mais segurança integrada e transações rm conformidade que são voltadas mais para áreas empresariais, o que as deixam mais pesadas.
+
+4)É o ponto de contato entre APIs, o ponto de entrada do canla de comunicação quando dois sistemas estão interagindo, é um meio de acesso há recursos de um servidor, por exemplo, para executar as tarefas necessárias.
+Podem haver APIs sem ENDPOINTs, por exemplo, as de conteúdo local, como gerenciamento de imput de teclado e mouse. 
+
+5) ProjetoXML e Teste2 
+
+Lógica
+1) D
+2) C
+3) A
+4) Fora do Se a variavel "peso_ideal" não existe, variáveis nome e sexo não foram inicializadas.
+5) C
+
+
+Conhecimentos EXCEL
+
+1) Selecione todos os cabeçalhos das colunas, botão direito do mouse, escolha a opção "Filtrar", e depois selecione
+"Filtrar por valor da celula selecionada", no topo da primeira coluna aperte botão direito e selecine todos, assim todos os itens irão aparecer normalmente. - Conhecimentos EXCEL - Questão 1.png
+Depois clique no cabeçalho da coluna, "Área CAR (ha)", clicar com o botão esquerdo do mouse no filtro e selecionar a opção "Classificar do Menor para o Maior", ou como preferir.
+
+2) Na coluna do CAR, selecionar o filtro, desmarcar a opção "SEM CAR" e clicar no ok.
+
+3)Selecione a coluna desejada, na parte superior irá aparecer a opção "Formatação Condicional", selecione "Regras de Realce das Células", "Valores Duplicados", escolha a opção que fique melhor para você vizualizar.
+É possível usar o atalho "Ctrl + shift + seta para baixo", para selecionar todo conteúdo, após isso vá na opção "Dados", "Remover Duplicadas" e clique em "Remover Duplicadas", selecione somente a coluna que será analisada e clique em "OK".Irá aparecer uma janela com o aviso de quantas foram removidas e quantas restaram, removidas 953 e ficaram 1114.
+
+4) Área Total: 1.259.257,18 ha, seleciona as duas colunas com área (ha) e sima com a fórmula "=soma(selecione as colunas que quer somar)", mesma coisa para moagem (biomasssa), total 9.351.898,68 t.
+Filtrar utilizado a coluna "Produtor de biocombustível possui algum CAR inelegível?", como "Não", assim todas as fazendas serão elegíveis, após isso é só somar novamente.Moagem de fazendas elegíveis, total 9.351.898,68 t, área total de fazendas elegíveis 1.259.257,18 ha.Lembrando que como é o total foram somados os das duas planilhas.Para calcular as fazendas ativas é só filtrar por ativas e somar os resultados, total 2.278 de fazendas ativas, 7 canceladas e 0 pendentes.
+
+5)Selecione a coluna desejada, na parte superior irá aparecer a opção "Formatação Condicional", selecione "Regras de Realce das Células","É igaul a" e selecione a palavra que deseja, no caso "Ativo", e selecione destacar de vermelho.
+
+Banco de Dados
+
+1)
+CREATE TABLE `FAZENDAS_AB` (
+	`chave` INT NOT NULL AUTO_INCREMENT,
+	PRIMARY KEY (`chave`)
+)
+COLLATE='latin1_swedish_ci'
+;
+
+3) SELECT COUNT(*) FROM fazendas_ab
+
+4)UPDATE
+    fazendas_ab
+SET
+    `Identificação do produtor de biomassa` = REPLACE(`Identificação do produtor de biomassa`, ' ','')
+WHERE
+    Chave > 0;
+
+5)Somatório do total da área:300694 ha
+select sum((select sum(`Área CAR`) from fazendas_ab)+
+(select sum(`Área Agricultável`) from fazendas_ab)) TOTAL
+from dual;
+
+Somatório do total da moagem: 5235020t
+select sum((select sum(`Biomassa Comprada`) from fazendas_ab)+
+(select sum(`Biomassa Processada`) from fazendas_ab)) TOTAL
+from dual;
+
+Moagem total Elegível: 5235020t
+select sum((select sum(`Biomassa Comprada`) from fazendas_ab where Inelegível = 'Não')+
+(select sum(`Biomassa Processada`) from fazendas_ab where Inelegível = 'Não')) TOTAL
+from dual;
+
+Área total Elegível: 300694 ha
+select sum((select sum(`Área CAR`) from fazendas_ab where Inelegível = 'Não')+
+(select sum(`Área Agricultável`) from fazendas_ab where Inelegível = 'Não')) TOTAL
+from dual;
+
+Forma Descendente por Município:
+select * from fazendas_ab group by Município DESC;
+
+Com Municípios e LENÇÓIS PAULISTA
+select * from fazendas_ab where Município = 'MACATUBA' or Município = 'LENÇÓIS PAULISTA' group by Município DESC;
+
+SELECT * FROM fazendas_ab WHERE `Planilha de Origem` = 'UNIDADE A.xlsx' and 
+(select sum((select sum(`Área CAR`) from fazendas_ab)+
+(select sum(`Área Agricultável`) from fazendas_ab)) TOTAL
+from dual)  > 20   order by `Planilha de Origem`, `Município`
+
+alter table fazendas_ab ADD ANEXO blob NULL;
+
+?
